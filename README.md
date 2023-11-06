@@ -17,7 +17,7 @@ This repository is a thorough compilation that displays the range of courses, pr
 9. BUSA8001 Applied Predictive Analytics
 10. BUSA8030 Management of Data, Analytics and Change
 11. BUSA8031 Business Analytics Project
-12. BUSA8090 Data and Visualization for Busines
+12. BUSA8090 Data and Visualization for Business
 
 ## __<center>Technical Skill</center>__
 - Excel
