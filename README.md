@@ -9,7 +9,7 @@ This repository is a thorough compilation that displays the range of courses, pr
 ## __<center>Structure</center>__
 1. MATH6904 Mathematical Modelling
 2. ECON6034 Econometrics and Business Statistics
-3. COMP6200 Data Science
+3. [COMP6200 Data Science] https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20
 4. COMP6210 Big Data
 6. AFIN8014 Fintech and Innovation
 7. STAT8123 Statistical Graphics
