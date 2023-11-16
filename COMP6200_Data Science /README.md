@@ -1,5 +1,5 @@
 # __<center>Data Science</center>__
-
+This unit provides an introduction to essential data science techniques and tools, including data visualization, predictive modeling, regression, classification, and clustering.
 ## __<center>Objectives</center>__
 -  Identify the appropriate Data Science analysis for a problem and apply that method to the problem.
 -  Interpret Data Science analyses and summarise and identify the most important aspects of a Data Science analysis.
