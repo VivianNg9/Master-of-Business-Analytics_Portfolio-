@@ -1,4 +1,4 @@
-# __<center>Data Science</center>__
+# __<center>Big Data</center>__
 This unit focuses on processing and mining large volumes of data, highlighting essential aspects and challenges. It introduces MapReduce, a technology widely used in industry, and demonstrates various data processing methods using this framework. Special attention is given to adapting data mining techniques for handling massive datasets and data streaming. This content serves as a guide for those looking to understand and implement effective data processing strategies in large-scale environments.
 ## __<center>Objectives</center>__
 - Explain the key Big Data concepts and techniques.
