@@ -35,9 +35,8 @@ This project focuses on the application of MapReduce paradigms for processing an
   - `task2_mergesort.py`: Implements Merge Sort.
   - `task2_bucketsort.py`: Implements Bucket Sort.
 
-## Submission
-Submit a zip file named 'FirstName_LastName_Assignment1.zip' via iLearn containing:
-- Report with Flowchart and Pseudocode for each MapReduce program.
+## Output
+- [Report](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Map%20Reduce%20Report.pdf) with Flowchart and Pseudocode for each MapReduce program.
 - Source code: `task1_extraction.py`, `task1_count.py`, `task2_mergesort.py`, `task2_bucketsort.py`.
 - Output files: [`year_and_company.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%201/year_and_company.txt), [`task1_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%201/task1_output.txt), [`task2_mergesort_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%202/task2_mergesort_output.txt), [`task2_bucketsort_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%202/task2_bucketsort_output.txt).
 
