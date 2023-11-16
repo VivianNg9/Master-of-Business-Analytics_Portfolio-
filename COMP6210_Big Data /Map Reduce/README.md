@@ -1,10 +1,10 @@
 # __<center>MapReduce Project</center>__
 
 ## __<center>Overview</center>__
-This project focuses on the application of MapReduce paradigms for processing and analyzing a large movies dataset.
+This project focuses on the application of MapReduce paradigms for processing and analyzing a large movie dataset.
 
 ## __<center>Datasets</center>__
-- `movies.zip`: Contains the movies dataset, which is used for all tasks in this project.
+- [`movies.zip`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/movies.json): Contains the movies dataset, which is used for all tasks in this project.
 
 ## __<center>Environment</center>__
 - **MongoDB & Studio 3T:** For database creation and dataset importation.
