@@ -21,11 +21,6 @@ The project involves creating an R-tree for efficient spatial querying of 2D poi
 - **R-Tree Construction and Querying:** Implemented in [`Rtree.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree.py) and [`Rtree_DC.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree_DC.py), these scripts construct R-trees and process queries utilizing a divide-and-conquer approach for improved efficiency.
 - **Classes:** `Node` and `RTree`, essential for building and managing the R-tree structure.
 
-## Deliverables
-- **Source Code:** Includes scripts for sequential scanning, R-tree construction, and range querying.
-- **Report:** A comprehensive document detailing program functions, execution requirements, and a thorough analysis of R-Tree's construction and searching mechanism.
-
-
 ## Output Files:
 1. **Sequential Scan Output [`Sequential_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Squential_output.txt):**
    - Contains the results of processing range queries using the sequential scan method.
@@ -41,6 +36,10 @@ The project involves creating an R-tree for efficient spatial querying of 2D poi
    - Output from processing queries using the R-tree with a divide-and-conquer approach.
    - Highlights the performance improvement over the standard R-tree method.
    - Contains the count of points within each range query and the corresponding processing times.
+
+4. **[Report](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/R_tree%20Report%20.pdf)**:
+   A comprehensive document detailing program functions, execution requirements, and a thorough analysis of R-Tree's construction and searching mechanism.
+
 
 
 
