@@ -37,7 +37,7 @@ The project involves creating an R-tree for efficient spatial querying of 2D poi
    - Highlights the performance improvement over the standard R-tree method.
    - Contains the count of points within each range query and the corresponding processing times.
 
-4. **[Report](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/R_tree%20Report%20.pdf)**:
+4. **[Report](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/R_tree%20Report%20.pdf):**
    A comprehensive document detailing program functions, execution requirements, and a thorough analysis of R-Tree's construction and searching mechanism.
 
 
