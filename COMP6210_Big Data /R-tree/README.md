@@ -25,10 +25,6 @@ The project involves creating an R-tree for efficient spatial querying of 2D poi
 - **Source Code:** Includes scripts for sequential scanning, R-tree construction, and range querying.
 - **Report:** A comprehensive document detailing program functions, execution requirements, and a thorough analysis of R-Tree's construction and searching mechanism.
 
-## Assignment Evaluation Criteria
-- **Correctness and Efficiency:** The program is evaluated for accuracy in query results and efficiency compared to sequential scanning.
-- **Detailed Comments:** The source code is expected to have detailed comments for better understanding and clarity.
-
 
 ## Output Files:
 1. **Sequential Scan Output [`Sequential_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Squential_output.txt):**
