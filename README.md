@@ -12,7 +12,7 @@ This repository is a thorough compilation that displays the range of courses, pr
 3. [COMP6200 Data Science](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20)
 4. [COMP6210 Big Data](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20)
 6. [AFIN8014 Fintech and Innovation](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/AFIN8014_Fintech%20and%20Innovation)
-7. STAT8123 Statistical Graphics
+7. [STAT8123 Statistical Graphics](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics)
 8. BUSA8000 Techniques in Business Analytics
 9. BUSA8001 Applied Predictive Analytics
 10. BUSA8030 Management of Data, Analytics and Change
