@@ -1,42 +1,51 @@
-# __<center>MapReduce Project</center>__
+ # __<center>R-tree Implementation Project</center>__
 
-## __<center>Overview</center>__
-This project focuses on the application of MapReduce paradigms for processing and analyzing a large movie dataset.
 
-## __<center>Datasets</center>__
-- [`movies.zip`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/movies.json): Contains the movies dataset, which is used for all tasks in this project.
+## Overview
+The project involves creating an R-tree for efficient spatial querying of 2D points. It emphasizes the correct application of R-trees in answering range queries and the comparative efficiency against sequential scanning.
 
-## __<center>Environment</center>__
-- **MongoDB & Studio 3T:** For database creation and dataset importation.
-- **pymongo:** To connect to MongoDB and extract document data.
-- **mrjob:** Framework for implementing MapReduce programs.
+## Dataset and Query Specification
+- **Dataset:** A collection of 2D points, each with unique IDs and coordinates, provided in [`R_tree_Construction.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/R_tree_construction.txt).
+- **Range Queries:** Set of 200 queries, each specifying a rectangular range, provided in [`200Range.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/200Range.txt).
 
-## __<center>Details</center>__
+## Environment and Languages
+- **OS Environment:** MacOS
+- **CPU:** Apple M2 Pro
+- **RAM:** 16GB
+- **Programming Language:** Python
+- **Python Version:** 3.11.4
+- **Development Tool:** Visual Studio Code
 
-### Task 1: Movie Count by Production Company and Year 
-- **Objective:** Calculate the number of movies released by each production company for every year.
-- **Steps:**
-  1. **Data Retrieval:** Access 'movie -> date' to get release dates and extract the release year.
-  2. **Company Identification:** Identify the top three production companies from 'movie -> companies'.
-  3. **Data Formatting:** Create `<year, company>` pairs.
-  4. **Data Storage:** Store these pairs in `year_and_company.txt`.
-  5. **MapReduce Implementation:** Use mrjob to calculate the frequency of each `<year, company>` pair.
+## Key Components of the Project
+- **Sequential Scan:** Implemented in [`Sequential_Scan.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Sequential_Scan.py), this script processes spatial range queries sequentially and outputs the results.
+- **R-Tree Construction and Querying:** Implemented in [`Rtree.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree.py) and [`Rtree_DC.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree_DC.py), these scripts construct R-trees and process queries utilizing a divide-and-conquer approach for improved efficiency.
+- **Classes:** `Node` and `RTree`, essential for building and managing the R-tree structure.
 
-### Task 2: Sorting Algorithms Implementation 
-- **Objective:** Implement Merge Sort and Bucket Sort algorithms using MapReduce to sort the results from Task 1.
-  - **Merge Sort:** Sort `<year, company>` pairs in ascending order. Output stored in `task2_mergesort_output.txt`.
-  - **Bucket Sort:** Sort `<year, company>` pairs in descending order. Output stored in `task2_bucketsort_output.txt`.
+## Deliverables
+- **Source Code:** Includes scripts for sequential scanning, R-tree construction, and range querying.
+- **Report:** A comprehensive document detailing program functions, execution requirements, and a thorough analysis of R-Tree's construction and searching mechanism.
 
-## Workflow
-- **Task 1:**
-  - `task1_extraction.py`: Extracts `<year, company>` pairs.
-  - `task1_count.py`: MapReduce program to calculate the movie count by company and year.
-- **Task 2:**
-  - `task2_mergesort.py`: Implements Merge Sort.
-  - `task2_bucketsort.py`: Implements Bucket Sort.
+## Assignment Evaluation Criteria
+- **Correctness and Efficiency:** The program is evaluated for accuracy in query results and efficiency compared to sequential scanning.
+- **Detailed Comments:** The source code is expected to have detailed comments for better understanding and clarity.
 
-## Output
-- [Report](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Map%20Reduce%20Report.pdf) with Flowchart and Pseudocode for each MapReduce program.
-- Source code: [`task1_extraction.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Source%20code%20for%20Task%201/task1_extraction.py), [`task1_count.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Source%20code%20for%20Task%201/task1_count.py), [`task2_mergesort.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Source%20code%20for%20Task%202/task2_mergesort.py), [`task2_bucketsort.py`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Source%20code%20for%20Task%202/task2_bucketsort.py).
-- Output files: [`year_and_company.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%201/year_and_company.txt), [`task1_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%201/task1_output.txt), [`task2_mergesort_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%202/task2_mergesort_output.txt), [`task2_bucketsort_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/Map%20Reduce/Output%20file%20for%20Task%202/task2_bucketsort_output.txt).
+
+## Output Files:
+1. **Sequential Scan Output [`Sequential_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Squential_output.txt):**
+   - Contains the results of processing range queries using the sequential scan method.
+   - Includes the total number of points within each query range.
+   - Records the total and average query processing times.
+
+2. **R-Tree Query Output [`Rtree_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree_output.txt):**
+   - Results of the range queries processed using the R-tree.
+   - Similar to the sequential output, it details the number of points per query range.
+   - Provides insights into the efficiency of the R-tree method by listing total and average processing times.
+
+3. **Divide-and-Conquer R-Tree Output [`Rtree_DC_output.txt`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/COMP6210_Big%20Data%20/R-tree/Rtree_DC_output.txt):**
+   - Output from processing queries using the R-tree with a divide-and-conquer approach.
+   - Highlights the performance improvement over the standard R-tree method.
+   - Contains the count of points within each range query and the corresponding processing times.
+
+
+
 
