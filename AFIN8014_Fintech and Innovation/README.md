@@ -1,4 +1,4 @@
-# __<center>Data Science</center>__
+# __<center>Fintech and Innovation</center>__
 This unit explores how technology, particularly FinTech elements like blockchain, big data, machine learning, and artificial intelligence, is revolutionizing the finance industry. It examines these technologies' potential to solve financial problems, including economic and psychological aspects, and how they are driving industry innovation, illustrated through cutting-edge cases.
 ## __<center>Objectives</center>__
 -  Identify the appropriate Data Science analysis for a problem and apply that method to the problem.
