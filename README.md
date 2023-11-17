@@ -21,6 +21,7 @@ This repository is a thorough compilation that displays the range of courses, pr
 
 ## __<center>Technical Skill</center>__
 - Excel
+- Mathlab
 - Python
 - R
 - SQL
