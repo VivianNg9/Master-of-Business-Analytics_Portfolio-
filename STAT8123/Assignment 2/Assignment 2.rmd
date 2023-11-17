@@ -1,0 +1,430 @@
+---
+title: "STAT7123/STAT8123"
+output:
+  pdf_document:
+    keep_tex: no
+    includes:
+date: "Due 11:55 pm, Friday September 29th, 2023"
+subtitle: "Statistical Graphics Assignment 2"
+author: "Mai Vy (Vivian) Nguyen"  
+---
+
+\section{Question 1}
+## Use tidyverse commands to calculate the total number of offences by local government area (LGA)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE, 
+                      warning = FALSE )
+
+library(knitr)
+library(tidyverse)
+library(ggplot2)
+library(zoo)
+library(scales)
+library(sf)
+library(dplyr)
+library(leaflet)
+```
+
+### a) Using 3-5 sentences, describe what features of this summary make the data challenging to plot
+```{r}
+# Read the CSV file
+df <- read.csv("penalty_notice.csv")
+# Group the data by LGA and count the number of offences
+offence_by_LGA <- df %>%
+  group_by(Offence_LGA) %>%
+  summarise(Total_Offences = n())
+offence_by_LGA
+```
+Visualizing data containing the number of offences across 54 Local Government Areas (LGAs) poses a number of challenges. Scale issues can also be caused by a wide range of violation counts ranging from a minimum of 1 to a maximum of 349 as LGAs with lesser violation counts are overshadowed in the plots.  As for LGAs with low offence amounts, overplotting might obfuscate the data. Moreover, it is difficult to create geographic or spatial representations when there is no geographical data available. 
+
+### b) Which LGA has the most offences?
+```{r}
+most_offence_LGA <- offence_by_LGA %>%
+  arrange(desc(Total_Offences)) %>%
+  head(1)
+most_offence_LGA
+```
+**Cantebury-Banktown** suburb has the highest number of offences with 349 offences. 
+
+### c) Use an appropriate plot to display a subset of the LGAs (do not use a map here) that could be used to answer the research question: “Which LGAs have the highest number of offences?”
+```{r, fig.height=6, fig.width=8}
+# Group and summarize the data
+top_LGAs <- df %>%
+  group_by(Offence_LGA) %>%
+  summarise(total_offences = n()) %>%
+  arrange(desc(total_offences))
+
+# Filter the top 10 LGAs with the highest number of offences
+top_LGAs <- top_LGAs %>%
+  filter(row_number() <= 10)
+
+# Create a plot
+ggplot(top_LGAs, aes(x = reorder(Offence_LGA, total_offences), 
+                     y = total_offences)) +
+  geom_bar(stat = "identity", fill = "mistyrose2") +
+  geom_text(aes(label = total_offences),
+            vjust = 0.5, size = 3, fontface="bold", hjust = 1) +  
+  coord_flip() +
+  theme_minimal() +
+  ggtitle("Total Offences by Local Government Area") +
+  xlab("Local Government Area (LGA)") +
+  ylab("Total Offences")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+The bar chart shows the top 10 Local Government Areas have the highest number of total offences. Among the LGAs, *Canterbury-Bankstown* has the highest number of offences with 349 incidents, nearly triple more than that of Burwood which is in second rank. While Blacktown comes in third with 107 offences. Cumberland, Liverpool,  Willoughby and City of Canada Bay follow suit with decreasing numbers of offences.  
+\newpage
+\section{Question 2}
+## Use tidyverse commands to calculate the number of offences and average amounts payable by month per year
+### a) Plot the number of offences by time 
+```{r, fig.height=6, fig.width=8}
+df$time <- as.yearmon(paste(df$Year, df$Month), "%Y %m")
+# Group by time and calculate the total number of offences
+offence_by_time <- df %>%
+  group_by(time) %>%
+  summarise(Total_Offences = n())
+# Create a time series plot
+ggplot(offence_by_time, aes(x = time, y = Total_Offences)) +
+  geom_line() +
+  theme_minimal() +
+  geom_point(color = "skyblue3", size = 2)+
+  ggtitle("The number of offences by time")+xlab("Time")+ylab("Total Offences")+
+  scale_x_yearmon(format = "%b %Y", n = 29) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+         plot.title = element_text(hjust = 0.5))
+```
+
+### b) In 3-5 sentences, interpret your plot to answer the research question “Are there any trends, patterns or seasonality in the number of events over time?”
+The graph illustrates the number of reported offences from December 2021 to June 2023. Notably, a clear seasonality is evident, with consistent peaks in June 2022 and April 2023, indicating a recurring pattern of increased criminal activity during these months. Furthermore, there is an overall upward trend in reported offences, particularly from December 2021 to June 2022, suggesting a sustained increase in criminal incidents during this timeframe. Furthermore, periodic fluctuations are apparent, with periods of lower offence counts followed by spikes, hinting at potential cyclic patterns or external factors influencing the reported number of offences. 
+
+
+### c) Plot the average amount payable by time
+```{r, fig.height=6, fig.width=8}
+# Group by time and calculate the average amount payable
+average_payable_by_time <- df %>%
+  group_by(time) %>%
+  summarise(Amount_Payable = mean(Amount_Payable, na.rm = TRUE))
+
+# Create a time series plot for average amount payable by time
+ggplot(average_payable_by_time, aes(x = time, y = Amount_Payable)) +
+  geom_line() +
+  geom_point(color = "hotpink3", size = 2)+
+  ggtitle("Average Amount Payable by Time") +
+  xlab("Time") +
+  ylab("Average Amount Payable") +
+  theme_minimal() +
+  scale_x_yearmon(format = "%b %Y", n = 29) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+         plot.title = element_text(hjust = 0.5))
+```
+
+### d) In 3-5 sentences, interpret your plot to answer the research question “Are there any trends, patterns or seasonality in average amounts payable over time?”
+The time series plot depicting the "Average Amount Payable by Time" exhibits several noteworthy observations. Firstly, there is a discernible overall upward trajectory in the average amount payable by offenders as time progresses, indicating a general increase in the financial penalties imposed. Secondly, a recurring pattern with peaks and troughs emerges, suggesting the presence of seasonality. Notably, there are spikes in average amounts payable in February and March each year, potentially linked to specific periods of heightened offence activity or legal alterations. Moreover, isolated anomalies, such as the peaks observed in March in both years, imply transient periods of unusually high average payments, which may be attributed to external factors.
+\newpage
+\section{Question 3}
+## Using all of the data:
+### a) Create a violin plot that includes the individual data points to determine if there is a difference in the penalties (amounts payable) issued by the NSW Food Authority versus Councils
+```{r, fig.height=6, fig.width=8}
+df$Issuing_Authority <- ifelse(df$Issuing_Authority == "NSW Food Authority", 
+                               "NSW Food Authority", "Councils")
+
+#Create a violin plot 
+ggplot(df, aes(x = Issuing_Authority, y = Amount_Payable, fill = Issuing_Authority)) +
+  geom_violin() +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.5) +
+  labs(x = "Issuing Authority", y = "Amount Payable") +
+  labs(title ="Penalty Amounts by Issuing Authority") +
+  scale_fill_manual(values = c("NSW Food Authority" = "slategray1", "Councils" ="mistyrose"))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme_minimal()
+```
+
+### b) Interpret the plot to answer the research question: “Is there a difference in the amounts payable issued by the NSW Food Authority compared to Councils?”
+The violin plot illustrates the distribution of penalty amounts payable, differentiating between the issuing authorities, namely the NSW Food Authority and Councils. There is a difference in the amounts payable issued by the NSW Food Authority compared to Councils. As for Councils, the distribution appears to be bimodal, with two prominent peaks in the density around 440 and 880. This suggests that Councils often issue penalties at these specific amounts, possibly reflecting standardized penalty structures. The distribution for Councils is relatively symmetric, indicating that they have a relatively balanced distribution of penalty amounts on either side of the median. In contrast, the NSW Food Authority's distribution is notably different. This suggests that the NSW Food Authority predominantly issues penalties at or around 880, with fewer deviations from this amount. The distribution also appears slightly skewed to the right, indicating a tendency towards higher penalty amounts than Councils. Therefore, while Councils have a more evenly distributed range of penalty amounts, the NSW Food Authority tends to issue penalties more consistently.
+
+\newpage
+\section{Question 4}
+## Using all of the data:
+### a) Create and present a map that shows the number of penalties by LGA in NSW (this could be a choropleth map or a dot density map) 
+```{r, include=FALSE}
+# Read the shapefile
+nsw_shapefile <- st_read("LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp")
+# Filter the shapefile to focus on NSW
+nsw_shapefile <- nsw_shapefile %>%
+  filter(STE_NAME21 == "New South Wales")
+```
+
+```{r}
+# Check mismatched LGA names of df and nsw_shapefile 
+# Unique LGA names in df
+unique_df_LGA <- unique(df$Offence_LGA)
+# Unique LGA names in nsw_shapefile
+unique_shapefile_LGA <- unique(nsw_shapefile$LGA_NAME21)
+# Compare the unique LGA names
+mismatched_LGA <- setdiff(unique_df_LGA, unique_shapefile_LGA)
+```
+
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+# Clean the LGA names of nsw_shapefile
+nsw_shapefile$LGA_NAME21 <- str_remove(nsw_shapefile$LGA_NAME21, " \\(.+\\)")
+nsw_shapefile$LGA_NAME21 <- str_replace(nsw_shapefile$LGA_NAME21, "^Sydney$", 
+                                        "City of Sydney")
+nsw_shapefile$LGA_NAME21 <- str_remove(nsw_shapefile$LGA_NAME21, " Regional")
+nsw_shapefile$LGA_NAME21 <- str_remove(nsw_shapefile$LGA_NAME21, " Shire")
+
+# Clean the LGA names of df
+df$Offence_LGA <- str_replace(df$Offence_LGA, "^City of (?!Sydney)", "") 
+df$Offence_LGA <- str_replace(df$Offence_LGA, "Ku-Ring-Gai", "Ku-ring-gai")
+
+# Group the data by LGA and calculate the number of penalties in each LGA
+penalties_by_lga <- df %>%
+  filter(df$Offence_LGA %in% nsw_shapefile$LGA_NAME21) %>%
+  group_by(Offence_LGA) %>%
+  summarize(Total_Offences = n())
+
+# Merge the penalty counts with the LGA shapefile
+merged_nsw_shapefile <- nsw_shapefile %>%
+  left_join(penalties_by_lga, by = c("LGA_NAME21" = "Offence_LGA"))
+
+# Create the choropleth map 
+ggplot() +
+  geom_sf(data=merged_nsw_shapefile, aes(fill = Total_Offences)) +
+  scale_fill_viridis_c(option = "F", direction = -1, na.value = "grey90",
+                       name = "Total Offences")+ 
+  labs(title = "The number of offences by LGA in NSW") +
+  theme_minimal()+ 
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.key.size = unit(1.5, "cm"))
+```
+
+### b) Focus the map on the Sydney region
+```{r, fig.height=6, fig.width=8}
+ggplot() +
+  geom_sf(data = merged_nsw_shapefile, aes(fill = Total_Offences)) +
+  scale_fill_viridis_c(option = "F", direction = -1, na.value = "grey90",
+                      name = "Total Offences") +
+  labs(title = "The number of offences by LGA in Sydney Region") +
+  theme_minimal() +
+  coord_sf(xlim = c(150.5, 151.5), ylim = c(-34.2, -33.5)) +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.key.size = unit(1.5, "cm"))
+
+
+
+```
+
+### c) In one sentence, explain why we may want to focus on the Sydney region.
+Based on the distribution of the darkest colors in the choropleth map for the number of penalties by LGA in NSW, Sydney region has the highest number of penalties by LGA.
+
+### d) In about 3 sentences, summarise the main results of the plot presented in part (b)
+The choropleth map for Sydney region shows clearly with a color scheme from darkest to lightest showing areas with the most to least food offence, respectively. Moreover, with the legend and range being similar to the NSW's choropleth map color scheme may suggest that Sydney represents efficiently for the allocation of offending areas to NSW. Western and Southern Sydney areas have a much higher offence rate than northern Sydney.
+
+\newpage
+\section{Question 5}
+## The data contains a column showing a detailed description of the offence (Nature_of_Offence_Full). The description is quite long, and so it cannot be used directly in plots. However, it is of interest to summarise. It may be necessary to simplify the information contained in this column without losing important information about the nature of the offence. 
+
+### a) Describe in detail, using a series of bullet points, how you could handle (simplify) the data in this column so that it can be graphically presented.
+To simplify the data of the offence (Nature_of_Offence_Full) for graphic presentation, the data should be followed by:
+
+#### Step 1: Text Preprocessing (to ensure uniformity and cleanliness of the data):
+
+- Convert all text to lowercase to make every value is in the same format.  
+- Remove any leading or trailing whitespaces.
+
+#### Step 2: Categorization (categorize the offences based on common keywords or themes in descriptions):
+
+- Create a new column, "New_Nature_of_Offence," for this purpose.
+- Use regular expressions to search for specific keywords or phrases that indicate the nature of the offence, e.g., "animal/pest control," "equipment condition," "contamination," etc.
+- Assign a simplified label or category to each offence based on the identified keywords.
+- Group similar offences together under broader categories to reduce complexity.
+
+#### Step 3: Labeling for 'Warning' (identify offences associated with warnings):
+
+- Create another column, "Warning_Classification," to indicate whether a warning is associated with the offence description.
+- Use regular expressions to identify phrases related to warnings and label them accordingly.
+
+
+#### Step 5: Data Aggregation (aggregate the data based on the simplified offence categories):
+
+- Group the data by the simplified offence categories.
+- Perform aggregations like counting the occurrences of each category or summing associated penalty amounts.
+
+#### Step 6: Visualization
+
+- Using plots to visualize to represent the simplified offence categories and their relationships with other relevant variables.
+
+\newpage
+### b)  Complete your data handling (you can ask for help from your conveners with this), and create and present three statistical graphics. The graphics should display the nature of the offence, along with other relevant variables that you think provide insight into the data. For each plot presented, explain in detail (about 100 words) what the plot shows so that a non-expert can understand the pattern/trend. 
+
+
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+library(dplyr)
+# Convert the data into lower case 
+df$Nature_of_Offence_Full<-tolower(df$Nature_of_Offence_Full)
+# Create a new column to categorize the data in "Nature_of_Offence_Full" column 
+df <- df %>%
+  mutate(
+    New_Nature_of_Offence = case_when(
+      grepl("pests| live animals", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Animal/Pest Control",
+      grepl("contamina", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Contamination",
+      grepl("maintain the food premises", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Cleanliness of Food Premises ",
+      grepl("appropriate enforcement agency", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Enforcement Agency Notification",
+      grepl("equipment| utensils", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Equipment Condition",
+      grepl("use-by date| unsuitable| unsafe| cool cooked| reheat| unpackaged food| nature or substance| frozen| disposed", df$Nature_of_Offence_Full, ignore.case = TRUE)
+      ~ "Food Condition",
+      grepl("floors are able to be", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Floor Condition",
+      grepl("food handling| practicable measures", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Food Handling",
+      grepl("garbage| grabage", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Garbage Storage",
+      grepl("hand washing| handwashing", df$Nature_of_Offence_Full, ignore.case = TRUE)
+      ~ "Hand Washing Facility",
+      grepl("illegal preservative", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Illegal Preservative",
+      grepl("design", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Inadequate Premises Design",
+      grepl("adequate supply of water| waste water ", df$Nature_of_Offence_Full, ignore.case = TRUE)
+      ~ "Inadequate Water Supply",
+      grepl("food labelled in contravention", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Labeling Violation",
+      grepl("licence| food safety supervisor| advisory statements| scheme", df$Nature_of_Offence_Full, ignore.case = TRUE)
+      ~ "Licence Violation",
+      grepl("microbiological safety", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Microbiological Safety",
+      grepl("prohibition order", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Prohibition Order",
+      grepl("temperature", df$Nature_of_Offence_Full, ignore.case = TRUE) 
+      ~ "Temperature Control",
+    )
+  )
+# Create a new column 'Warning_Classification' based on the 'Nature_of_Offence_Full' column
+df <- df %>%
+  mutate(Warning_Classification = case_when(
+    grepl("warning", df$Nature_of_Offence_Full, ignore.case = TRUE) ~ "Yes",
+    TRUE  ~ "No"))
+
+# Create a new column "Type_of_Offence" based on the "Offence_Description" column
+df <- df %>%
+  mutate(Type_of_Offence = case_when(
+    grepl("Corporation", df$Offence_Description, ignore.case = TRUE) ~ "Corporation",
+    grepl("Individual", df$Offence_Description, ignore.case = TRUE) ~ "Individual",))
+
+```
+
+**Graphic 1: Trend Analysis of Offences Over Time**
+```{r, fig.align = 'center', fig.width=11, fig.height=11}
+library(ggplot2)
+library(dplyr)
+library(lubridate)  
+
+# Group and summarize the data by month, nature of offence, and type of offence
+offence_type_time <- df %>%
+  mutate(time) %>%
+  group_by(time, New_Nature_of_Offence, Type_of_Offence) %>%
+  summarise(Count = n())
+
+# Create a plot 
+ggplot(offence_type_time, aes(x = time, y = Count, color = Type_of_Offence)) +
+  geom_line(aes(group = Type_of_Offence), size = 1) +
+  geom_point(aes(group = Type_of_Offence), size = 3, alpha = 0.7) +
+  labs(
+    title = "Trend Analysis of Offences Over Time",
+    x = "Time",
+    y = "The number of offences",
+    color = "Type of Offence"
+  ) +
+  facet_wrap(~ New_Nature_of_Offence, ncol = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text( colour = "grey20", size = 12, hjust = 0.5, vjust = 0.5),
+        axis.text.y = element_text(colour = "grey20", size = 12),
+        strip.text = element_text(face = "italic"),
+        text = element_text(size = 12.5), 
+        plot.title = element_text(hjust = 0.5))
+
+```
+The plot illustrates the impact of time on each food safety offence in the years 2022 and 2023, categorized by type of offence and whether they were committed by corporations or individuals. It highlights a consistent trend of reduction in food safety violations throughout the observed period. Notably, corporate entities consistently outpace individuals in the commission of such offences, underscoring the necessity for stringent oversight and regulatory measures within the corporate sector. The top three most prevalent offences encompass issues related to equipment condition, cleanliness of food premises and hand washing facility, respectively. The number of offences from the middle of 2022 to early 2023 remained at a higher rate in the whole period. However, in general, until mid-2023, the number of crimes tends to decrease, which is a positive sign in reducing food violations. 
+\newpage
+**Graphic 2: Occurence of Offence by Warning Classification **
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+# Group the data by New_Nature_of_Offence and Warning_Classification
+offence_type_amount <- df %>%
+  group_by(New_Nature_of_Offence, Warning_Classification) %>%
+  summarise(Offence_Occurrence = n()) %>%
+  arrange(desc(Offence_Occurrence))
+
+# Create a stacked bar chart
+ggplot(offence_type_amount, aes(x = reorder(New_Nature_of_Offence, Offence_Occurrence), y = Offence_Occurrence, fill = Warning_Classification)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("Yes" = "rosybrown", "No" = "mistyrose")) +
+  labs(
+    title = "Occurence of Offence by Warning Classification",
+    x = "Nature of Offence",
+    y = "Occurrence of Offence",
+    fill = "Warning Classification"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text( hjust = 0.5),
+    plot.title = element_text(hjust = 0.5)
+  ) +
+  coord_flip() +
+  guides(fill = guide_legend(title = "Warning Classification"))
+```
+The stacked bar chart provides a comprehensive view of the relationship between the occurrence of offences and the presence of prior warnings. Each bar represents a distinct type of offence, with two distinct categories: "Yes" indicating that a warning was issued before the offence, and "No" suggesting that there was no prior warning. The plot reveals that offences preceded by warnings ("Yes") seemly exhibit a notably lower occurrence rate compared to those without prior warnings ("No"). This suggests that warnings play a pivotal role in deterring specific offence types. Notably, offences related to "Equipment Condition," "Licence Violation,"  and "Temperature Control" emerge as particularly responsive to pre-warning measures, underscoring the effectiveness of such interventions in reducing violations within these categories. Conversely, offences such as "Contamination" and "Hand Washing Facility" appear less likely to be forewarned, highlighting areas where preventative actions may need to be reinforced for more comprehensive compliance with regulations. 
+
+\newpage
+**Graphic 3: Penalty Amounts by top 5 Suburb in NSW and Offences**
+```{r, fig.align = 'center', fig.width=11, fig.height=9}
+
+# Find the top 5 suburbs with the most penalty amount
+top_suburbs <- df %>%
+  group_by(Offence_LGA) %>%
+  summarise(Total_Penalty_Amount = sum(Amount_Payable)) %>%
+  arrange(desc(Total_Penalty_Amount)) %>%
+  head(5)
+
+# Filter the data to include only records from these top 5 suburbs
+filtered_df <- df %>%
+  filter(Offence_LGA %in% top_suburbs$Offence_LGA)
+
+# Group the filtered data by suburb and offence, and calculate the total penalty amount
+offence_amount <- filtered_df %>%
+  group_by(Offence_LGA, New_Nature_of_Offence) %>%
+  summarise(Total_Penalty_Amount = sum(Amount_Payable))
+
+# Find the top 5 offences for each suburb and arrange them in descending order
+top_offences <- offence_amount %>%
+  group_by(Offence_LGA) %>%
+  arrange(Offence_LGA, desc(Total_Penalty_Amount)) %>%
+  top_n(5)
+
+# Create a heatmap
+ggplot(top_offences, aes(x = reorder(New_Nature_of_Offence, Total_Penalty_Amount), y = reorder (Offence_LGA,Total_Penalty_Amount), fill = Total_Penalty_Amount)) +
+  geom_tile() +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +  
+  labs(
+    title = "Penalty Amounts by top 5 Suburb in NSW and Offences ",
+    x = "Nature of Offence",
+    y = "Suburb",
+    fill = "Total Penalty Amount"
+  ) +
+  theme_minimal() +
+  coord_flip() +
+  theme(
+    axis.text.x = element_text( hjust = 0.5),
+    axis.ticks.x = element_blank(),
+    plot.title = element_text(hjust = 0.5),
+    legend.key.size = unit(1.5, "cm")) 
+  
+```
+The heatmap illustrates penalty amounts for the 5 prominent suburbs in New South Wales (NSW) concerning the top 5 food safety offences in each area. The color intensity within each cell serves as a visual indicator of the cumulative penalty amount attributed to that suburb-offence combination. "Equipment Condition" and "Cleanliness of Food Premises" are frequently in the top 5 causes of food offence in all 5 regions, followed by "Contamination" in 4 out of 5 regions. Notably, suburbs such as Canterbury-Bankstown and Blacktown exhibit significantly elevated penalty amounts for offences related to "Equipment Condition" and "Hand Washing Facility". Meanwhile, in Burwood and Cumberland, offences pertaining to "Equipment Condition" and "Contamination" also garner substantial penalties. Conversely, "Cleanliness of Food Premises" and "Temperature Control" offences consistently result in comparatively lower penalties across all examined suburbs. 
+
+
+
+

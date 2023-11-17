@@ -1,0 +1,539 @@
+---
+title: "STAT7123/STAT8123"
+output:
+  pdf_document:
+    keep_tex: no
+    includes:
+date: "Due 11:55 pm, Friday November 3rd, 2023"
+subtitle: "Statistical Graphics Assignment 3"
+author: "Mai Vy (Vivian) Nguyen"
+---
+
+\section{Question 1}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE, 
+                      warning = FALSE )
+
+library(ggalt)
+library(ggplot2)
+library(sf)
+library(dplyr)
+library(broom)
+library(alluvial)
+library(ggalluvial)
+library(dplyr)
+library(corrplot)
+library(knitr)
+library(viridis)
+library(tidyr)
+library(RColorBrewer)
+library(ggcorrplot)
+```
+### a) Make a dumbbell plot that shows that change in average attendance between 2011 and 2022 for the 5 different school remoteness categories. In 2-4 sentences, comment on what the dumbbell plot shows in regards to the changes in student attendance rates.
+
+```{r, fig.align = 'center', fig.width=9, fig.height=7}
+# Load the data (assuming the data file is in the working directory)
+school_data <- read.csv("school.csv")
+# Compute the average attendance for each remoteness category for 2011 and 2022
+avg_attendance <- school_data %>%
+  group_by(asgs_remoteness) %>%
+  summarise(
+    attend_2011_avg = mean(attend_2011, na.rm = TRUE),
+    attend_2022_avg = mean(attend_2022, na.rm = TRUE)
+  )
+# Plot the dumbbell chart
+# Plot the dumbbell chart with custom legend
+avg_attendance %>%
+  ggplot(aes(x=attend_2011_avg, xend=attend_2022_avg, y=reorder(asgs_remoteness,
+                                     attend_2011_avg),group=asgs_remoteness)) +
+  geom_dumbbell(size = 1, size_x = 3, size_xend = 3, colour = "grey",
+                colour_x = "darkorange", colour_xend = "skyblue") +
+  # Adding dummy points for legend
+  geom_point(aes(x=attend_2011_avg, y=asgs_remoteness, color="2011"), size=5) +
+  geom_point(aes(x=attend_2022_avg, y=asgs_remoteness, color="2022"), size=5) +
+  scale_color_manual(name="Year",
+                     values=c("2011"="darkorange", "2022"="skyblue")) +
+  theme_minimal() +
+  labs(title = "Change in Average Student Attendance (2011 to 2022)",
+       x = "Average Attendance Rate", y = "Remoteness Category") +
+  theme(legend.position="right")
+```
+The dumbbell plot reveals an overarching decline in student attendance rates across all Australian remoteness categories from 2011 to 2022. Specifically, "Major Cities of Australia" saw attendance wane from 93% to 86%, while "Inner Regional Australia" decreased from 92% to 84%. "Outer Regional Australia" followed suit, receding from 91% to 83%. Most notably, "Remote Australia" and "Very Remote Australia" experienced the sharpest drops, plummeting from 88% to 75% and 85% to 69% respectively, highlighting the challenges in these particularly remote areas.
+
+\newpage
+
+
+### b) Create an alluvial plot with 2022 data, using three categorical variables on the axes: selective_school, school_gender, and asgs_remoteness. In 2-4 sentences, comment on what the alluvial plot shows in regards to school types.
+```{r}
+school_counts <- school_data %>%
+  group_by(selective_school, school_gender, asgs_remoteness) %>%
+  summarize(school_count = n()) 
+
+kable(school_counts, caption = 
+    "School Counts by Selectivity, Gender, and Remoteness", align = 'c')
+```
+The table of school counts indicates a significant variation in the number of schools across different combinations of the three categorical variables: selectivity, gender, and remoteness. For instance, a large number of non-selective coed schools are located in major cities, and the count is considerably high (820), while only one fully selective school for boys is found in inner regional Australia.
+
+For a streamlined alluvial plot visualization:
+
+
+**Category Consolidation**:
+
+- "selective_school": group 'Fully' and 'Partially Selective' schools as 'Selective'.
+
+- "school_gender": combine "Boys" and "Girls" as "Not-Coed".
+
+- "ags_remoteness": group "Inner Regional Australia" and "Outer Regional Australia" as "Regional Areas", combine "Remote Australia" and "Very Remote Australia" as "Remote Areas".
+
+**Logarithmic Scaling**: To address significant count disparities, a logarithmic y-axis transformation was used, preventing overlap and enhancing visibility in the alluvial plot.
+
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+# Modify categories as per the new instructions
+modified_data <- school_data %>%
+  mutate(
+    selective_school = case_when(
+      selective_school == "Not Selective" ~ "Not Selective",
+      selective_school %in% c("Fully Selective", "Partially Selective")
+      ~ "Selective",
+      TRUE ~ selective_school
+    ),
+    school_gender = case_when(
+      school_gender == "Coed" ~ "Coed",
+      school_gender %in% c("Boys", "Girls") ~ "Not-Coed",
+      TRUE ~ school_gender
+    ),
+    asgs_remoteness = case_when(
+      asgs_remoteness == "Major Cities of Australia" ~ "Major Cities",
+      asgs_remoteness %in% c("Inner Regional Australia", 
+                             "Outer Regional Australia") ~ "Regional Areas",
+      asgs_remoteness %in% c("Remote Australia", "Very Remote Australia")
+      ~ "Remote Areas",
+      TRUE ~ asgs_remoteness
+    )
+  ) %>%
+  group_by(selective_school, school_gender, asgs_remoteness) %>%
+  summarize(count = n()) %>%
+  ungroup()
+# Create the alluvial plot
+ggplot(data = modified_data, 
+       aes(y = count, 
+           axis1 = selective_school, 
+           axis2 = school_gender, 
+           axis3 = asgs_remoteness)) +
+  geom_alluvium(aes(fill = selective_school),
+                width = 0, knot.pos = 0.5, reverse = FALSE) +
+  guides(fill = FALSE) + 
+  geom_stratum(width = 1/6, reverse = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            reverse = FALSE) +
+  scale_x_continuous(breaks = 1:3, labels = c("Selectivity", "Gender", 
+                                              "Remoteness")) + 
+  scale_y_continuous(trans = "log10") +  # Apply log transformation to the y-axis
+  theme_minimal() +
+  coord_flip()+
+  ggtitle("Alluvial plot of School Types")
+```
+The alluvial plot vividly illustrates the distribution of school types across selectivity, gender, and remoteness categories. A significant portion of schools, especially non-selective ones, are located in major cities, and many of these are coeducational. On the contrary, selective schools, both coed and not-coed, show a more balanced distribution between major cities and regional areas. Remote areas, however, have a minimal presence of schools in both selectivity categories, indicating limited educational options in these regions.
+\newpage
+
+### c) For this question, select 5 different schools (You are required to show which schools you picked). Create two plots; (i) a line plot, and (ii) a stacked area plot for the 5 schools showing the changes in percentage attendance over time. Which school had the highest attendance percentage in 2018? Provide 2-4 sentences which comment on the benefits and drawbacks of each plot.
+
+I will select the schools with the highest enrollment in 2022 from each of the five categories in "ags_remoteness". This decision was underpinned by an intent to discern if a correlation exists between high enrollment figures in 2022 and attendance rates for the same year in each school as an extra finding.  
+
+```{r}
+# Selecting the top school with highest enrolment_2022 in each asgs_remoteness category
+selected_schools <- school_data %>%
+  group_by(asgs_remoteness) %>%
+  filter(enrolment_2022 == max(enrolment_2022, na.rm = TRUE)) %>% 
+  ungroup() %>%
+  select(school_name, asgs_remoteness, enrolment_2022)
+# Displaying the selected schools in a table
+kable(selected_schools, 
+      col.names = c("School Name", "Remoteness Category", "Enrolment (2022)"), 
+      align = 'c', 
+      caption = "Top Schools in Each Remoteness Category")
+```
+There are 5 selected schools that: "Brewarrina Central School", "Brewarrina Central School", "Jindabyne Central School", "Lightning Ridge Central School", "Castle Hill High School", "Ulladulla High School".
+
+```{r}
+# Check if the selected_schools is a dataframe or a vector of school names
+# If it's a dataframe, extract the school names into a vector
+if(is.data.frame(selected_schools)) {
+  selected_school_names <- selected_schools$school_name
+} else {
+  selected_school_names <- selected_schools
+}
+# Filter and select the required columns
+filtered_school <- school_data %>% 
+  filter(school_name %in% selected_school_names) %>% 
+  select(school_name, starts_with("attend_"))
+# Adjust the column names
+colnames(filtered_school) <- gsub("attend_", "", colnames(filtered_school))
+# Convert data to long format using pivot_longer()
+filtered_school <- filtered_school %>%
+  pivot_longer(cols = -school_name, names_to = "year", values_to = 
+                 "attendance_percentage")
+
+```
+
+
+**The school has the highest attendance percentage in 2018**
+```{r}
+top_school_2018 <- filtered_school %>% 
+  filter(year == "2018") %>% 
+  arrange(-attendance_percentage) %>%
+  head(1)
+kable(top_school_2018)
+```
+Among 5 selected schools, **Castle Hill High School** has the highest attendance percentage at 93% in 2008. 
+
+
+```{r, fig.height=6, fig.width=8}
+# Plotting the line chart
+ggplot(filtered_school, aes(x = as.factor(year), y = attendance_percentage, 
+                            group = school_name)) +
+  geom_line(aes(color = school_name)) +
+  geom_point(color = "hotpink3", size = 1) +
+  ggtitle("Changes in Percentage Attendance Over Time (Line Plot)") +
+  xlab("Year") +
+  ylab("Attendance Percentage") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Paired", guide = guide_legend(
+    title = "School Name")) +
+  theme(axis.text.x = element_text( hjust = 0.5),
+        plot.title = element_text(hjust = 0.5))
+
+```
+The line plot offers a clear and direct visualization of attendance trends for each school over the years. Its distinct lines provide an instantaneous comparative analysis between schools, highlighting the nuances of their attendance percentages in any given year. However, one of its main drawbacks is the potential clutter when multiple schools have overlapping or closely proximate data points. This can make the plot challenging to interpret, especially if the lines are closely spaced or if there are numerous schools represented with similar color codes.
+
+```{r, fig.height=6, fig.width=8}
+ggplot(filtered_school, aes(x = as.factor(year), y = attendance_percentage, 
+                            fill = school_name, group = school_name)) +
+  geom_area(alpha = 0.6, position = 'stack') +
+  scale_fill_brewer(palette = "Paired") + 
+  labs(
+    title = "Changes in Percentage Attendance Over Time (Stacked Area Plot)",
+    x = "Year",
+    y = "Attendance Percentage",
+    fill = "School Name"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5)
+  ) +
+  guides(fill = guide_legend(title = "School Name"))
+
+```
+The stacked area plot excels in offering a comprehensive view of the combined attendance percentages of all schools over time. Its layering approach showcases the cumulative contribution of each school to the overall attendance, helping to discern the school's significance in the larger context. On the downside, direct comparisons between two specific schools can be challenging. If one school consistently appears above another in the stacking order, the direct relationship between them can be obscured. Furthermore, if there's a major attendance change in a school situated in the middle layers, it might not be as evident as it would be in the line plot.
+
+**Extra Finding**: 
+
+- As for Castle Hill High School, it has the highest both in enrollment in 2022 and attendance rate in 2022.
+
+- As for Ulladulla High School, the school had the second-highest full-time enrolment in 2022, however, it placed in the top 3 in attendance percentage in the same year.
+
+Therefore, it would not identify the correlation between enrollment in 2022 and attendance rate in the same year among 5 selected schools. 
+
+\newpage
+### d) Create two different plots of your choice to explore the school attendance data further.
+**FIRST PLOT: MAP FOR THE AVERAGE INDIGENOUS STUDENTS PERCENTAGE BY LGA IN NSW**
+```{r, include = FALSE}
+# Read the shapefile
+nsw_shapefile <- st_read("LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp")
+# Filter the shapefile to focus on NSW
+nsw_shapefile <- nsw_shapefile %>%
+  filter(STE_NAME21 == "New South Wales")
+```
+```{r, include = FALSE}
+# Extract unique LGA names from school_data
+unique_school_LGA <- unique(school_data$lga)
+# Extract unique LGA names from nsw_shapefile
+unique_shapefile_LGA <- unique(nsw_shapefile$LGA_NAME21)
+# Identify mismatched LGA names by comparing the two sets
+mismatched_LGA <- setdiff(unique_school_LGA, unique_shapefile_LGA)
+print(mismatched_LGA)
+```
+```{r, include = FALSE}
+# Remove () in the lga name 
+school_data$lga <- gsub("\\s*\\(.*?\\)", "", school_data$lga)
+```
+```{r, include = FALSE}
+# Extract unique LGA names from school_data
+unique_school_LGA <- unique(school_data$lga)
+# Extract unique LGA names from nsw_shapefile
+unique_shapefile_LGA <- unique(nsw_shapefile$LGA_NAME21)
+# Identify mismatched LGA names by comparing the two sets
+mismatched_LGA1 <- setdiff(unique_school_LGA, unique_shapefile_LGA)
+print(mismatched_LGA1)
+```
+```{r, include=FALSE}
+# Identify mismatched LGA names by comparing the two sets
+mismatched_LGA2 <- setdiff(unique_shapefile_LGA, unique_school_LGA)
+print(mismatched_LGA2)
+```
+```{r, include = FALSE}
+# Check mismatched areas in the dataset 
+# Update the lga column based on the specified conditions
+school_data <- school_data %>%
+  mutate(lga = ifelse(lga %in% c("Central Coast", "Bayside", "Campbelltown"), 
+                      paste0(lga, " (NSW)"), lga),
+         lga = ifelse(lga == "Nambucca", "Nambucca Valley", lga))
+```
+```{r, include = FALSE}
+# Extract unique LGA names from school_data
+unique_school_LGA <- unique(school_data$lga)
+# Extract unique LGA names from nsw_shapefile
+unique_shapefile_LGA <- unique(nsw_shapefile$LGA_NAME21)
+# Identify mismatched LGA names by comparing the two sets
+mismatched_LGA3 <- setdiff(unique_school_LGA, unique_shapefile_LGA)
+print(mismatched_LGA3)
+```
+
+
+
+```{r, fig.align = 'center', fig.width=25, fig.height=25}
+# Calculate average indigenous_pct for each LGA and asgs_remoteness
+avg_indigenous_pct <- school_data %>%
+  group_by(lga, asgs_remoteness) %>%
+  summarize(avg_indigenous_pct = mean(indigenous_pct, na.rm = TRUE))
+# Calculate average indigenous_pct for entire NSW
+avg_nsw <- school_data %>%
+  group_by(lga) %>%
+  summarize(avg_indigenous_pct = mean(indigenous_pct, na.rm = TRUE), 
+            asgs_remoteness = "All of NSW")
+# Combine both data
+combined_data <- rbind(avg_indigenous_pct, avg_nsw)
+# Join the nsw_shapefile with the combined_data
+map_data <- left_join(nsw_shapefile, combined_data, by = c("LGA_NAME21" = "lga"))
+# Remove NAs from the map_data
+map_data <- map_data %>% filter(!is.na(avg_indigenous_pct))
+# Plot the choropleth map
+ggplot(data = map_data) +
+  geom_sf(aes(fill = avg_indigenous_pct), color = "white") +
+  scale_fill_viridis_c(option = "I", name = "Indigenous Percentage (%)", 
+                       breaks = seq(0, 100, by = 10), direction = -1) + 
+  labs(title = "Average Indigenous Student Percentage by LGA in NSW") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 30, face = "bold"),      
+    strip.text = element_text(size = 25, face = "bold"),                    
+    legend.key.height = unit(5, "cm"),
+    legend.key.width = unit(5, "cm"),
+    legend.title = element_text(hjust = 0.5,size = 25, face = "bold"),
+     legend.text = element_text(size = 22, face = "bold")                   
+  ) +
+  facet_wrap(~asgs_remoteness, ncol = 2)
+```
+The graphic illustrates the average proportion of full-time Aboriginal students enrolled across various Local Government Areas (LGAs) in New South Wales (NSW). Notably, the regions of "Remote Australia" and "Very Remote Australia" have the most significant representation of Indigenous students. Brewarrina, classified under "Very Remote Australia," stands out with a striking 97% average of full-time Aboriginal student enrollment. While "Outer Regional Australia" also exhibits a notable average, the "Major Cities of Australia" and "Inner Regional Australia" areas display comparatively lower percentages of full-time Aboriginal students.
+
+\newpage
+**SECOND PLOT: TREND ANALYSIS OF ATTENDANCE RATE OVERTIME"**
+```{r, fig.align = 'center', fig.width=11, fig.height=11}
+# Reshape data to long format for 'attend_YYYY' columns
+school_long <- school_data %>%
+  gather(key = "Year", value = "Attendance_Rate", starts_with("attend_"))
+# Extract year from the 'Year' column and convert to numeric
+school_long$Year <- as.numeric(substr(school_long$Year, 8, 11))
+# Group and summarize the data by year, asgs_remoteness, and selective_school
+attendance_trend <- school_long %>%
+  group_by(Year, asgs_remoteness, selective_school) %>%
+  summarise(Avg_Attendance = mean(Attendance_Rate, na.rm = TRUE))
+# Create the plot
+ggplot(attendance_trend, aes(x = Year, y = Avg_Attendance, color = selective_school)) +
+  geom_line(aes(group = selective_school), size = 1) +
+  geom_point(aes(group = selective_school), size = 3, alpha = 0.7) +
+  labs(
+    title = "Trend Analysis of Average Attendance Rate Overtime",
+    x = "Year",
+    y = "Average Attendance Rate (%)",
+    color = "School Selectiveness"
+  ) +
+  facet_wrap(~ asgs_remoteness, ncol = 3) +
+  theme_bw() +
+  scale_x_continuous(breaks = seq(min(attendance_trend$Year), 
+                                  max(attendance_trend$Year), by = 2)) +  
+  theme(axis.text.x = element_text(colour = "grey20", size = 12, hjust = 0.5,
+                                   vjust = 0.5),
+        axis.text.y = element_text(colour = "grey20", size = 12),
+        strip.text = element_text(face = "italic"),
+        text = element_text(size = 12.5), 
+        plot.title = element_text(hjust = 0.5))
+```
+The trend analysis of average attendance rates over time reveals distinct patterns across various regions of Australia and the selectiveness of schools. From 2011 to 2022, schools in major cities, inner and outer regional Australia with full selectivity consistently exhibited the highest attendance rates. However, there's been a noticeable decline across all categories in recent years, with a significant drop in 2022. Schools in very remote Australia have consistently registered the lowest attendance, while non-selective schools in remote areas have seen a sharp decrease in attendance from 2019 onwards. These patterns underscore the importance of considering regional variations and school selectiveness when analyzing attendance trends in the country.
+
+
+\newpage
+
+
+### e) Understanding, analysing, and communicating data is essential for any analytics role. Job descriptions for such positions often emphasise the importance of statistics skills to interpret and communicate data effectively with a broad audience. Within 150 words, provide an informative, coherent and precise summary of your finding from the graphical analysis of the given data set. On top of the 150 words, provide 2-4 insights from the data (these can be done as bullet points).
+
+Over the past decade, the graphical analysis of Australian education trends presents notable shifts in student attendance rates. From 2011 to 2022, there's a marked decline in attendance across all remoteness categories, with "Remote Australia" and "Very Remote Australia" witnessing the steepest drops. The alluvial plot emphasizes the concentration of non-selective schools in major cities, the majority being coeducational. In stark contrast, very remote regions reveal limited educational options, especially when compared to their urban counterparts. In-depth scrutiny of specific school attendance over time did not conclusively tie high enrollment figures in 2022 to prominent attendance rates for the same year. Lastly, the map focusing on New South Wales underscores Brewarrina’s standout statistic of 97% Aboriginal student enrollment, indicating significant regional variances in indigenous student representation.
+
+**Insights:**
+
+- Schools in "Remote Australia" and "Very Remote Australia" are particularly vulnerable, showing the most drastic reductions in attendance.
+
+- Non-selective schools predominantly find their base in major cities, with a majority catering to coeducational setups.
+
+- Brewarrina in NSW is a significant hub for Aboriginal education, with nearly all its students being indigenous.
+
+- The trend analysis uncovers an unsettling decrease in attendance from 2019 onwards for non-selective schools in remote areas.
+
+
+\newpage
+\section{Question 2}
+### a) Plot the correlation matrix for all the appropriate variabes from the soccer dataset. In 2-4 sentences, comment on the different correlations between variables.
+```{r, fig.height=6, fig.width=8}
+# Load the data 
+soccer_data <- read.csv("soccer.csv")
+# Compute the correlation matrix
+correlation_matrix <- cor(soccer_data, use = "complete.obs") # ignoring NA values
+# Plot the correlation matrix using ggcorrplot
+ggcorrplot(correlation_matrix, hc.order = TRUE, type = "upper", 
+           outline.col = "white",
+           lab = TRUE, #add correlation coefficients 
+           ggtheme = ggplot2::theme_gray(),
+           colors = c("#6D9EC1", "white", "#E46726"))
+
+```
+
+The given correlation matrix provides insights into the relationships between various match variables in soccer. Notably, there is a strong positive correlation between home shots "hs" and home shots on target "hst" with a coefficient of 0.71, implying that when home teams take more shots, they also tend to have more of those shots on target. Similarly, away shots "as" and away shots on target "ast" show a strong positive correlation of 0.74. On the other hand, there's a negative correlation of -0.55 between away shots on target "ast" and home win "home_win", suggesting that as the away team's shots on target increase, the probability of the home team winning decreases. There are also various other correlations in the matrix, but these stood out as particularly significant, offering a nuanced understanding of how different match variables can influence game outcomes.
+\newpage
+
+
+### b) Graphically explore the relationship between hs, as, and home_win.
+
+```{r}
+ggplot(soccer_data, aes(x = hs, y = as, color = as.factor(home_win))) + 
+  geom_point(alpha = 0.9) +
+  scale_color_manual(values = c("orange", "skyblue4"), labels = c("No", "Yes"))+
+  labs(title = "Scatter plot of Home Shots vs Away Shots",
+       x = "Home Shots",
+       y = "Away Shots",
+       color = "Home Win") +
+  theme_minimal()
+```
+This scatter plot displays the correlation between home and away team shots in relation to the home team's victory. Notably, a dense clustering appears between 5 to 20 shots for both teams, with home victories (blue dots) more frequent when home shots exceed away shots. Conversely, orange dots in areas where away shots significantly surpass home shots suggest away team dominance, even if they don't always secure a win. Few instances near the plot's origin represent matches with minimal shots from both sides, possibly indicating defensive gameplay. Although the plot offers insights into shot numbers and match outcomes, a more detailed analysis incorporating additional metrics, like shots on target, would provide a comprehensive view.
+
+
+\newpage
+
+
+
+### c) Fit a model for home side wins, home_wins, to understand what factors are possibly influencing home side wins. This model should be a fit a glm model with a binomial family (family = "binomial"). Then, use the broom package to tidy up your model output and provide an interpretation of the model. Provide 2-4 sentences on if and how any of the model diagnostic plots look different to those seen in the lecture content and SGTA material.
+```{r}
+homewin_glm <- glm(home_win ~ hs + as + hst + ast + hf + af + hc + ac, 
+                   family="binomial", data=soccer_data)
+```
+
+```{r, include = FALSE}
+step(homewin_glm)
+```
+```{r}
+
+# Data for the stepwise model selection results
+stepwise_data <- data.frame(
+  Step = c("Start", 1, 2, 3, 4),
+  `Removed Variable` = c("None", "hf", "af", "hs", "as"),
+  Deviance = c(226.35, 226.35, 226.38, 226.45, 227.06),
+  AIC = c(244.35, 242.35, 240.38, 238.45, 237.06),
+  `Model Variables` = c("hs, as, hst, ast, hf, af, hc, ac", 
+                        "hs, as, hst, ast, af, hc, ac",
+                        "hs, as, hst, ast, hc, ac",
+                        "as, hst, ast, hc, ac",
+                        "hst, ast, hc, ac")
+)
+# Center aligning all columns
+alignment <- rep('c', ncol(stepwise_data))
+
+kable(stepwise_data, caption = "Stepwise Model Selection Results", digits = 4, 
+      table.envir = FALSE)
+```
+**The First Model**
+Call:  glm(formula = home_win ~ hst + ast + hc + ac, family = "binomial", data = soccer_data)
+```{r}
+homewin_glm1 <- glm(home_win ~ hst + ast + hc + ac, family="binomial", 
+                    data=soccer_data)
+summary_table <- summary(homewin_glm1)$coefficients
+colnames(summary_table) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+kable(summary_table, caption = "GLM Model Summary for The First Model", 
+      digits = 4)
+# Display glance of the model
+glance_table <- glance(homewin_glm1)
+kable(glance_table, caption = "GLM Model Diagnostics for The First Model", 
+      digits = 4)
+```
+
+
+To enhance the model's predictive capability, an interaction term between "ast" and "ac" is introduced, given their strong correlation (based on answer question (a)). This Interaction term captures the combined effect of away shots on target and away corners on the likelihood of a home team victory.
+
+
+```{r}
+# ast*ac
+homewin_glm2 <- glm(home_win ~ hst + ast + ac + hc + ast*ac, family="binomial",
+                    data=soccer_data)
+
+# Display summary of the model
+summary_table2 <- summary(homewin_glm2)$coefficients
+colnames(summary_table2) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+kable(summary_table2, caption = "GLM Model Summary with Interaction Term", 
+      digits = 4)
+
+# Display glance of the model
+glance_table <- glance(homewin_glm2)
+kable(glance_table, caption = "GLM Model Diagnostics with Interaction Term", 
+      digits = 4)
+```
+```{r}
+# Display tidy of the model
+tidy_output <- tidy(homewin_glm2)
+kable(tidy_output, caption = "Tidy Output for GLM Model with Interaction Term", 
+      digits = 4)
+```
+
+**The Final Model:** 
+\[ \log\left(\frac{p}{1-p}\right) = 1.8136 + 0.6245 \times hst - 1.1154 \times ast - 0.1246 \times ac - 0.1233 \times hc + 0.0700 \times ast \times ac \]
+
+- \( \log\left(\frac{p}{1-p}\right) \) is the log-odds of a home win.  
+- \( p \) is the probability of a home win.  
+- \( hst \) represents the number of home shots on target.  
+- \( ast \) indicates the number of away shots on target.  
+- \( ac \) stands for the number of away corners.  
+- \( hc \) is the number of home corners.  
+- \( ast \times ac \) is the interaction term between away shots on target and away corners.
+
+\newpage
+
+**The diagnostic plot for The Final Model**
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+par(mfrow = c(2,2))
+plot(homewin_glm2)
+```
+
+**Interpretation the model:**
+The comprehensive analysis of the GLM model offers a profound understanding of the factors impacting home-side wins in soccer. The Residuals vs Fitted plot exhibits a distinct curvilinear pattern, suggesting potential non-linearity in the predictors. The Q-Q Residuals plot's deviations from the expected straight line, particularly at the tail ends, raise concerns about the normality of residuals. The Scale-Location plot reveals potential heteroscedasticity, indicating non-constant variance in the residuals. Nevertheless, the Residual vs Leverage plot shows no outliers with excessive leverage, indicating a robust model. Delving deeper into the predictors, 'hst', 'ast', 'hc', and 'ac' emerge as crucial variables, corroborating the model's findings. Specifically, an increase in shots on target by the home team heightens the probability of a home win, whereas more shots on target by the away team counteract this effect. Additionally, the interaction between the away team's shots on target and their corners is statistically significant, pointing to their combined influence on match outcomes. To conclude, while the model paints a comprehensive picture of the influential factors, it also underscores potential non-linear relationships and many concerns arise regarding the residuals.
+
+**Compared to the lecture's diagnostic plots**, my model's "Residuals vs Fitted" plot shows a clearer U-shaped curvature, suggesting a more evident nonlinearity in the data. Additionally, while both models have deviations in the Q-Q Residuals plot, my presents slighter deviations, implying a closer alignment to normal distribution. The "Scale-Location" plot from my model suggests a bit more heteroscedasticity than the lecture's model, with a noticeable U-shaped trend. Lastly, both "Residuals vs Leverage" plots highlight influential points, but their positions and labels differ between the two models.
+
+
+
+\newpage
+
+
+
+## d) Plot the confidence interval(s) for the regression coeﬀicient(s) from the model in part (b). Write 2-3 sentences that discuss what is shown in the plot.
+```{r, fig.align = 'center', fig.height=6, fig.width=8}
+# Using broom to tidy the model and get the confidence intervals
+td_homewin_glm2 <- tidy(homewin_glm2, conf.int = TRUE)
+# Plotting the confidence intervals
+ggplot(td_homewin_glm2, aes(x = estimate, y = term, color = term)) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Confidence Intervals for Regression Coefficients",
+       x = "Estimate",
+       y = "Variables")
+```
+The confidence intervals plot for the regression coefficients offers key insights into the significance and direction of each predictor's effect. Notably, "hst" has a positive coefficient with a confidence interval distinctly above zero, signifying its strong positive influence on the home team's winning odds. In contrast, "ast" has a negative coefficient with a confidence interval entirely below zero, indicating a significant decrease in the home team's winning odds. The interaction term "ast*ac" demonstrates a positive relationship, suggesting the combined effect of away shots on target and away corners differs from their individual influences.
