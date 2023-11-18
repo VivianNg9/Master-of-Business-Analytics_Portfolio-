@@ -6,8 +6,9 @@ This unit focuses on processing and mining large volumes of data, highlighting e
 - Apply Map-reduce techniques to a number of problems that involve Big Data.
 - Apply techniques for handling high-dimensional big data.
 ## __<center>Structure</center>__
-1. [Map Reduce](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20/Map%20Reduce) 
-2. [R-tree](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20/R-tree)
+1. [Map Reduce](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20/Map%20Reduce)
+   The project involves creating an R-tree for efficient spatial querying of 2D points. It emphasizes the correct application of R-trees in answering range queries and the comparative efficiency against sequential scanning.
+3. [R-tree](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20/R-tree)
 ## __<center>Technical Skill</center>__
 - MongoDB & Studio 3T
 - Python
