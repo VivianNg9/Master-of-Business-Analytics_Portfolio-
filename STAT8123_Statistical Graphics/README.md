@@ -15,7 +15,7 @@ This course covers the principles of effective graphical presentation, blending 
 - **Folder**:[Assignment 2](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics/Assignment%202)
   - **Report file**:[`Assignment 2.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%202/Assignment%202.pdf)
   - **R markdown file**:[`Assignment 2.rmd`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%202/Assignment%202.rmd)
-  - **Dataset file**: [`penalty_notice.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%202/penalty_notice.csv)
+  - **Dataset file**: [`penalty_notice.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%202/penalty_notice.csv), [`LGA_2021_AUST_GDA2020_SHP`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics/Assignment%202/LGA_2021_AUST_GDA2020_SHP)
 - **Description**:
   - Answering a series of research questions using R with the tidyverse commands.
   - Adhering to quality criteria like using tidyverse for data manipulation, crafting professional graphics with ggplot, and providing clear interpretations and written responses.
@@ -24,11 +24,13 @@ This course covers the principles of effective graphical presentation, blending 
 - - **Folder**:[Assignment 3](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics/Assignment%203)
   - **Report file**:[`Assignment 3.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/Assignment%203.pdf)
   - **R markdown file**:[`Assignment 3.rmd`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/Assignment%203.rmd)
-  - **Dataset file**: [`school.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/school.csv), [`soccer.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/soccer.csv)
+  - **Dataset file**: [`school.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/school.csv), [`soccer.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/soccer.csv), [`LGA_2021_AUST_GDA2020_SHP`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics/Assignment%203/LGA_2021_AUST_GDA2020_SHP)
 - **Description**:
   - Answering a series of research questions using R and the tidyverse suite of commands.
   - Adhering to quality criteria like using tidyverse for data manipulation, crafting professional graphics with ggplot, and providing clear interpretations and written responses.
   - Using statistical graphics to investigate and analyse data, check statistical model assumptions and effectively present the results of statistical investigations graphically to a range of audiences.
+
+
 ## __<center>Technical Skill</center>__
 - Excel
 - R
