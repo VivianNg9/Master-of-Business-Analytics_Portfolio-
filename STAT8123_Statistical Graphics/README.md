@@ -26,7 +26,7 @@ This course covers the principles of effective graphical presentation, blending 
   - **R markdown file**:[`Assignment 3.rmd`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/Assignment%203.rmd)
   - **Dataset file**: [`school.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/school.csv), [`soccer.csv`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/STAT8123_Statistical%20Graphics/Assignment%203/soccer.csv)
 - **Description**:
-  - Answer a series of research questions using R and the tidyverse suite of commands.
+  - Answering a series of research questions using R and the tidyverse suite of commands.
   - Adhering to quality criteria like using tidyverse for data manipulation, crafting professional graphics with ggplot, and providing clear interpretations and written responses.
   - Using statistical graphics to investigate and analyse data, check statistical model assumptions and effectively present the results of statistical investigations graphically to a range of audiences.
 ## __<center>Technical Skill</center>__
