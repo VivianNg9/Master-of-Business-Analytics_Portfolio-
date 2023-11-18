@@ -30,7 +30,7 @@ the law in their Name and Shame list (https://www.foodauthority.nsw.gov.au/offen
 | Published_Address       | Address of business                             |
 | Postcode                | Postcode of business                            |
 | Amount_Payable          | Penalty amount ($)                              |
-| Offence_LGA|            | Local government area (LGA) of offence          |
+| Offence_LGA             | Local government area (LGA) of offence          |
 
 The assignment folder also contains a zip file containing LGA shapefile information that you may need to
 answer one or more questions.
