@@ -1,5 +1,5 @@
 # __<center>Master of Business Analytics - Portfolio</center>__
-This repository is a thorough compilation that displays the range of courses, projects, and abilities I have developed throughout my pursuit of a Master's degree in Business Analytics at Macquarie University.
+In the Master of Business Analytics program at Macquarie University, I have developed an advanced proficiency in data analytics, specializing in data modelling, statistical analysis, and machine learning applied to big data contexts. My education emphasized hands-on experience with computer programming and database management, preparing me to extract, interpret, and leverage complex datasets for strategic decision-making. Through rigorous coursework and real-world projects, I have honed my ability to transform data into actionable insights, demonstrating both technical expertise and ethical considerations in analytics-driven solutions.
 
 ## __<center>Objectives</center>__
 - **Develop Analytical Expertise:** Gain advanced knowledge in analytical methods, including statistics, data mining, and predictive modelling, to interpret complex data and deliver insights.
