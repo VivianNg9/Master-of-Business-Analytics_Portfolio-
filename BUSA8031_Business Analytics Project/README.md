@@ -10,3 +10,9 @@ This course focuses on decision-making, people management, and soft skills in an
 
 ## Structure:
 1. Individual Assignment
+- **Report file**: [`Individual Assignment.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Individual%20Assignment%20/Individual%20Assignment.pdf)
+- **Dataset file**: [`BBE_Dataset.xlsx`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Individual%20Assignment%20/BBE_Dataset.xlsx)
+
+2. Project Assignment
+- **Report file**: [`Group Project- Covid19.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Group%20Project/Group%20Project-%20Covid19.pdf)
+
