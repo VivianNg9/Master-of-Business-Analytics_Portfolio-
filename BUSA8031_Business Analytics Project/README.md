@@ -22,6 +22,8 @@ We are working for Best Bike Ever (BBE), a fictional company with a global prese
 ### 2. Project Assignment
 **Objective**:
 The main goal of this assignment is to immerse ourselves in the practical aspects of a business analytics project. Working in teams, we will explore, analyze, and derive insights from extensive COVID-19 data, both national and international, to inform health-related decision-making in Australia. This task will not only sharpen our analytical skills but also enhance our employability by adding direct industry engagement experience to our resumes.
+**Scope of Work**: 
+Our task is to analyze publicly available COVID-19 data to uncover meaningful insights that can support evidence-based interventions and policies. This involves exploring various aspects like pandemic waves, hospitalization rates, vaccination uptake, policy impacts, and data anomalies.
 
 - **Report file**: [`Group Project- Covid19.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Group%20Project/Group%20Project-%20Covid19.pdf)
 
