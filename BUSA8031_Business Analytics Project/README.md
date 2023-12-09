@@ -9,7 +9,7 @@ This course focuses on decision-making, people management, and soft skills in an
 - Examine Business Analytics contribution to individuals, organisations and society and predict the ethical implications relating to the use of data analytics for these stakeholders.
 
 ## Structure:
-1. Individual Assignment
+### 1. Individual Assignment
 **Overview of the Assignment**
 In this project, titled "Client Briefing Report," we are tasked with the role of a business analyst, specifically stepping into the shoes of a Solution Architect. Our primary objective is to analyze and propose technology solutions to address complex problems in an organization. This involves a deep understanding of various technologies, their capabilities, and benefits, as well as proficiency in evaluating these technologies systematically.
 
@@ -19,7 +19,7 @@ We are working for Best Bike Ever (BBE), a fictional company with a global prese
 - **Report file**: [`Individual Assignment.pdf`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Individual%20Assignment%20/Individual%20Assignment.pdf)
 - **Dataset file**: [`BBE_Dataset.xlsx`](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/blob/main/BUSA8031_Business%20Analytics%20Project/Individual%20Assignment%20/BBE_Dataset.xlsx)
 
-2. Project Assignment
+### 2. Project Assignment
 **Objective**
 The main goal of this assignment is to immerse ourselves in the practical aspects of a business analytics project. Working in teams, we will explore, analyze, and derive insights from extensive COVID-19 data, both national and international, to inform health-related decision-making in Australia. This task will not only sharpen our analytical skills but also enhance our employability by adding direct industry engagement experience to our resumes.
 
