@@ -12,7 +12,7 @@ This unit provides an introduction to essential data science techniques and tool
    - [Portfolio 2](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20/Portfolio%20/Portfolio%202)
    - [Portfolio 3](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20/Portfolio%20/Portfolio%203)
    - [Portfolio 4](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20/Portfolio%20/Portfolio%204)
-
+3. [Critical Analysis Task](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6200_Data%20Science%20/Critical%20Analysis%20Task%20)
 ## __<center>Technical Skill</center>__
 - Python
 - Jupyter Notebook
