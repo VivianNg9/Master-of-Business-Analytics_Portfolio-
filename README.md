@@ -13,11 +13,8 @@ In the Master of Business Analytics program at Macquarie University, I have deve
 4. [COMP6210 Big Data](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/COMP6210_Big%20Data%20)
 6. [AFIN8014 Fintech and Innovation](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/AFIN8014_Fintech%20and%20Innovation)
 7. [STAT8123 Statistical Graphics](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/STAT8123_Statistical%20Graphics)
-8. BUSA8000 Techniques in Business Analytics
-9. BUSA8001 Applied Predictive Analytics
-10. BUSA8090 Data and Visualization for Business
-11. [BUSA8030 Management of Data, Analytics and Change](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/BUSA8030_Management%20of%20Data%2C%20Analytics%20and%20Change)
-12. [BUSA8031 Business Analytics Project](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/BUSA8031_Business%20Analytics%20Project)
+8. [BUSA8030 Management of Data, Analytics and Change](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/BUSA8030_Management%20of%20Data%2C%20Analytics%20and%20Change)
+9. [BUSA8031 Business Analytics Project](https://github.com/VivianNg9/Master-of-Business-Analytics_Portfolio-/tree/main/BUSA8031_Business%20Analytics%20Project)
 
 
 ## __<center>Technical Skill</center>__
