@@ -19,7 +19,7 @@ In the Master of Business Analytics program at Macquarie University, I have deve
 
 ## __<center>Technical Skill</center>__
 - Excel
-- Mathlab
+- Matlab
 - Python
 - R
 - SQL
