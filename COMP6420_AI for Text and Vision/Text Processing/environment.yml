@@ -1,0 +1,14 @@
+name: comp3420
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3
+  - nltk
+  - numpy
+  - scikit-learn
+  - spacy
+  - ipykernel
+  - pandas
+prefix: /Users/qyk/opt/anaconda3/envs/comp3420
+
